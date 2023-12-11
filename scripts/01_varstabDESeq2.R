@@ -3,7 +3,7 @@ library("tidyverse")
 library("DESeq2")
 set.seed(42)
 # import filtered count tables and metatables
-setwd("/home/vanda/Documents/PanBarley_transcriptome/00_geneTPM_peraccession/")
+getwd()
 fnames <- list.files(pattern = "PanBaRT20_geneTPM_ort_filt_*")
 cntlist = list()
 for (i in fnames) {
@@ -11,8 +11,11 @@ for (i in fnames) {
     cnt <- counts %>% mutate_if(is.numeric, as.integer)
     cntlist[[i]] <- cnt
 }
-setwd("/home/vanda/Documents/PanBarley_transcriptome/00_meta_peraccession/")
-fnames <- list.files(pattern = "*_meta.csv")
+getwd()
+wanted  <- list.files(pattern = ("_meta.csv"))
+unwanted <- list.files(pattern = ("PanBaRT20_geneTPM_meta.csv"))
+fnames <- base::setdiff(wanted, unwanted)
+#str(fnames)
 metalist = list()
 for (i in fnames) {
     m <- read.table(i, row.names = 1, header = TRUE, sep = ",", stringsAsFactors = FALSE)
@@ -20,7 +23,7 @@ for (i in fnames) {
     metalist[[i]] <- m
 }
 #
-setwd("/home/vanda/Documents/PanBarley_transcriptome/01_vsdTPMs_peraccession/")
+getwd()
 # 
 for (i in 1:20) {
     if (all(colnames(cntlist[[i]]) == rownames(metalist[[i]]))) {

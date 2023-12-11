@@ -1,12 +1,11 @@
-# WGCNA
-# for Pan-Barley project
+# WGCNA for Pan-Barley transcriptome
 library("WGCNA")
 library("tidyverse")
 options(stringsAsFactors = FALSE)
 enableWGCNAThreads(10)
 set.seed(42) # For reproducibility of results
 # import vsd tables
-setwd("/lustre/groups/pgsb/projects/panbarley_networks/01_vsdTPMs_peraccession/")
+getwd()
 fnames  <- list.files(pattern = ("_vsdTPM.csv"))
 str(fnames)
 vsdlist = list()
@@ -23,7 +22,7 @@ for (i in fnames) {
 }
 str(vsdlist[1])
 # import metatables
-setwd("/lustre/groups/pgsb/projects/panbarley_networks/00_meta_peraccession/")
+getwd()
 wanted  <- list.files(pattern = ("_meta.csv"))
 unwanted <- list.files(pattern = ("PanBaRT20_geneTPM_meta.csv"))
 meta_fnames <- base::setdiff(wanted, unwanted)
@@ -40,12 +39,14 @@ str(metalist[1])
 
 # Store softpower estimates for later
 softPowerVector <- vector("numeric", length = length(vsdlist))
+unmergedModulenumber <- vector("numeric", length = length(vsdlist))
+mergedModulenumber <- vector("numeric", length = length(vsdlist))
 
 # for bubbleplot
 mid <- 0
 
 # Loop through vsdlist
-setwd("/lustre/groups/pgsb/projects/panbarley_networks/03_wgcna_results/")
+getwd()
 for (i in names(vsdlist)) {
     print(i)
     vsd <- vsdlist[[i]] 
@@ -126,6 +127,7 @@ for (i in names(vsdlist)) {
                                pamRespectsDendro = FALSE );
     # The  label  0  isreserved for genes not assigned to any of the modules.
     unmergedColors = labels2colors(unmergedLabels)
+    unmergedModulenumber[i] = length(unique(unmergedColors))
     print(table(unmergedColors))
     print(table(unmergedLabels))
     sizeGrWindow(8,6);
@@ -167,7 +169,7 @@ for (i in names(vsdlist)) {
     pdf(file = paste(i, "_Dendogram_merged.pdf", sep = ""), wi = 8, he = 6)
     plotDendroAndColors(geneTree, 
                         cbind(unmergedColors, mergedColors),
-                        c("Dynamic Tree Cut", "Merged at 0.05"),
+                        c("Dynamic Tree Cut", "Merged at 0.1"),
                         dendroLabels = FALSE, hang = 0.03,
                         addGuide = TRUE, guideHang = 0.05)
     dev.off()
@@ -266,6 +268,9 @@ for (i in names(vsdlist)) {
                 file = paste(i, "_ortmodnames.csv", sep = ""), 
                 append = FALSE, quote = FALSE, sep = ",", dec = ".", row.names = FALSE, col.names = TRUE)
     
+    # save merged module number
+    mergedModulenumber[i] <- length(module_colors)
+    
     # Create better looking bubble plot
     print(str(moduleTraitPvalue))
     fisher <- as.data.frame(moduleTraitPvalue)
@@ -284,7 +289,7 @@ for (i in names(vsdlist)) {
     print(str(pf))
     # intersect with converted names
     pf_conv <- inner_join(pf, converted_ort_mod, by = "colors") %>%
-                mutate(Order = as.integer(str_extract(module_name, "_[0-9]+"))) %>%
+                mutate(Order = as.integer(str_replace_all(str_extract(module_name, "_[0-9]+"), "_", ""))) %>%
                 arrange(Order)
     print(str(pf_conv))
     
@@ -317,26 +322,27 @@ for (i in names(vsdlist)) {
                 strip.background = element_rect(fill = "transparent", colour = "transparent"),
                 axis.ticks=element_line(colour="black"),
                 axis.ticks.length = unit(8, "pt"))
-    # decide plot length based on number of modules
-    if (length(module_colors <= 25)) { 
-      15 <- width_of_plot
-    } else if (length(module_colors <= 30 {
-      17 <- width_of_plot
-    } else if (length(module_colors <= 40 {
-      20 <- width_of_plot
-    } else if (length(module_colors <= 50 {
-      22 <- width_of_plot
-    } else if (length(module_colors <= 60 {
-      24 <- width_of_plot
-    } else if (length(module_colors <= 70 {
-      26 <- width_of_plot
-    } else {28 <- width_of_plot}
+    # decide plot length based on number of modules                      
+    if (length(module_colors) <= 25) { 
+    width_of_plot <- 15
+    } else if (length(module_colors) <= 30) {
+    width_of_plot <- 17
+    } else if (length(module_colors) <= 40) {
+    width_of_plot <- 20
+    } else if (length(module_colors) <= 50) {
+    width_of_plot <- 22
+    } else if (length(module_colors) <= 60) {
+    width_of_plot <- 24
+    } else if (length(module_colors) <= 70) {
+    width_of_plot <- 26
+    } else {
+    width_of_plot <- 28}
     ggsave(plot = p1, filename = paste(i, "_ModuleTissueCorrelation.pdf", sep=""), width = width_of_plot, height = 7)
 } 
 
 # Create a data frame to store the collected softpower results
-softPowerResults <- data.frame(VsdName = names(vsdlist), SoftPower = softPowerVector)
-write.csv(softPowerResults, file = "wgcna_soft_power_results.csv", row.names = FALSE)
+additionalResults <- data.frame(VsdName = names(vsdlist), SoftPower = softPowerVector, UnmergedModules = unmergedModulenumber, MergedModules = mergedModulenumber)
+write.csv(additionalResults, file = "wgcna_additional_results.csv", row.names = FALSE)
 
 sessionInfo()
 

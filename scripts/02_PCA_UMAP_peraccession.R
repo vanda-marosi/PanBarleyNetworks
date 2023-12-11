@@ -8,7 +8,7 @@ library("umap")
 library("patchwork")
 set.seed(42)
 # import filtered count tables and metatables
-setwd("/home/vanda/Documents/PanBarley_transcriptome/01_vsdTPMs_peraccession/")
+getwd()
 fnames <- list.files(pattern = "*_vsdTPM.csv*")
 cntlist = list()
 for (i in fnames) {
@@ -16,8 +16,11 @@ for (i in fnames) {
     cnt <- counts %>% mutate_if(is.numeric, as.integer)
     cntlist[[i]] <- cnt
 }
-setwd("/home/vanda/Documents/PanBarley_transcriptome/00_meta_peraccession/")
-fnames <- list.files(pattern = "*_meta.csv")
+getwd()
+wanted  <- list.files(pattern = ("_meta.csv"))
+unwanted <- list.files(pattern = ("PanBaRT20_geneTPM_meta.csv"))
+fnames <- base::setdiff(wanted, unwanted)
+#str(fnames)
 metalist = list()
 for (i in fnames) {
     m <- read.table(i, row.names = 1, header = TRUE, sep = ",", stringsAsFactors = TRUE)
@@ -25,7 +28,7 @@ for (i in fnames) {
     metalist[[i]] <- m
 }
 #
-setwd("/home/vanda/Documents/PanBarley_transcriptome/02_PCA_UMAP_peraccession/")
+getwd()
 #
 cols <- c("ID", "Accession", "Tissue", "Batch")
 #
