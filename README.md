@@ -2,22 +2,19 @@
 
 This repository contains the analysis scripts for the pan-barley transcriptome co-expression pipeline. 
 
-# Table of Contents
+### Table of Contents
 
-<details>
-<summary>"Click to expand"</summary>
-
-- [Preparation of count & metadata tables](#preparation-of-count---metadata-tables)
-- [Variance Stabilizing Transformation](#variance-stabilizing-transformation)
-- [Principal Component Analysis](#principal-component-analysis)
-- [Weighted Gene Correlation Network Analysis](#weighted-gene-correlation-network-analysis)
-- [Mercator Functional Enrichment Analysis](#mercator-functional-enrichment-analysis)
-- [Comparison of Co-expression Networks with Jaccard-distance and Cosine-similarity](#comparison-of-co-expression-networks-with-jaccard-distance-and-cosine-similarity)
-- [Louvain Method for Community Detection](#louvain-method-for-community-detection)
-- [OrthoFinder Analysis](#orthofinder-analysis)
+- [1. Preparation of count & metadata tables](#preparation-of-count---metadata-tables)
+- [2. Variance Stabilizing Transformation](#variance-stabilizing-transformation)
+- [3. Principal Component Analysis](#principal-component-analysis)
+- [4. Weighted Gene Correlation Network Analysis](#weighted-gene-correlation-network-analysis)
+- [5. Mercator Functional Enrichment Analysis](#mercator-functional-enrichment-analysis)
+- [6. Comparison of Co-expression Networks with Jaccard-distance and Cosine-similarity](#comparison-of-co-expression-networks-with-jaccard-distance-and-cosine-similarity)
+- [7. Louvain Method for Community Detection](#louvain-method-for-community-detection)
+- [8. OrthoFinder Analysis](#orthofinder-analysis)
+- [References](#references)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 
 ---
 
@@ -66,3 +63,12 @@ Across all accessions, a meta-network was established by computing edges using t
 In order to identify well-known rice orthologs
 
 ---
+
+## References
+
+*
+*
+*
+*
+*
+
