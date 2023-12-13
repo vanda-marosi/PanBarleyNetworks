@@ -15,18 +15,18 @@ This repository contains the analysis scripts for the pan-barley transcriptome c
 - [References](#references)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
+[GitHub Pages](https://pages.github.com/)
 ---
 
 ## Preparation of count & metadata tables
-The R script 00_DataWrangling.ipynb demonstrates how to divide the overall count table (PanBaRT20_tpm_genes.csv) from all 297 samples into accession specific sample tables and how to subset the single-copy orthologs from all genes, using the "core;single" keywords on the GsRTD_and_PanBaRT20_match.tsv table. The generated "PanBaRT20_geneTPM_ort_filt_*.csv" and "\*_meta.csv" tables serve as input tables for the next step of the analysis.
+The R script [00_DataWrangling.ipynb](https://github.com/vanda-marosi/PanBarleyNetworks/blob/main/scripts/00_DataWrangling.ipynb) demonstrates how to divide the overall count table (`PanBaRT20_tpm_genes.csv`) from all 297 samples into accession specific sample tables and how to subset the single-copy orthologs from all genes, using the "core;single" keywords on the `GsRTD_and_PanBaRT20_match.tsv` table. The generated `"PanBaRT20_geneTPM_ort_filt_*.csv"` and `"*_meta.csv"` tables serve as input tables for the next step of the analysis.
 
 Out of the total number of 13,680 single copy genes, 13,652 genes have passed the filter of lowly expressing genes (TPM > 0.5 in minimum 2 biological replicates) in all accessions and were taking part of the following analysis. 
 
 ---
 
 ## Variance Stabilizing Transformation
-R package DESeq2 (v1.34.0) (doi:10.1186/s13059-014-0550-8) is used to perform variance stabilizing transformation for normalization applying the design “~Tissue” with the argument “blind = FALSE” in the 01_varstabDESeq2.R script.
+R package DESeq2 (v1.34.0) is used to perform variance stabilizing transformation for normalization applying the design “~Tissue” with the argument “blind = FALSE” in the [01_varstabDESeq2.R](https://github.com/vanda-marosi/PanBarleyNetworks/blob/main/scripts/01_varstabDESeq2.R) script <sup>1</sup>.
 
 ---
 
@@ -66,7 +66,7 @@ In order to identify well-known rice orthologs
 
 ## References
 
-*
+* 1 Love MI, Huber W, Anders S (2014). “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.” Genome Biology, 15, 550. doi:10.1186/s13059-014-0550-8.
 *
 *
 *
