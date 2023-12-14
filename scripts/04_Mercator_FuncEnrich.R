@@ -65,8 +65,7 @@ for(i in unique(mod2gene$module_name)) {
             names(tempset) <- NULL
             print(head(tempset, 3))
     		enrich <- enricher(gene = genelist, 
-                       	#pvalueCutoff = 0.05,
-                        pvalueCutoff = 0.1,
+                       	pvalueCutoff = 0.05,
                        	pAdjustMethod = "BH",
                        	#universe = get(paste0("universe_", subg[j])),
                        	minGSSize = 10,
