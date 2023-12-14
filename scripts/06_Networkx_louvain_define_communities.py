@@ -57,6 +57,18 @@ for i, community in enumerate(communities):
         partition[node] = i
 print(len(communities))
 ##############
+## Save results in table
+##############
+meta_mod_table = []
+for meta, modlist in partition.items():
+    for mod in modlist:
+        x = (mod, meta)
+        meta_mod_table.append(x)
+mod_meta_df = pd.DataFrame(meta_mod_table, columns =['Module', 'Community'])
+print(mod_meta_df[0:5]) 
+os.getcwd()
+mod_meta_df.to_csv('Module_to_metamodule_louvain.csv', sep=',', index=False, header=False)
+##############
 print("Network is developed and communities are detected. Now figure development starts.")
 ##############
 ## Draw figure
